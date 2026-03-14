@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "default": "al-imtihan"
+  },
+  "targets": {
+    "al-imtihan": {
+      "hosting": {
+        "production": [
+          "al-imtihan",
+          "imtihan"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

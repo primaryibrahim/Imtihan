@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Community exams collection
+    match /exams/{examId} {
+      // Anyone can read exams
+      allow read: if true;
+      
+      // Anyone can create exams (with validation)
+      allow create: if request.resource.data.keys().hasAll(['title', 'author', 'questions', 'header'])
+                    && request.resource.data.questions is list
+                    && request.resource.data.questions.size() > 0
+                    && request.resource.data.title is string
+                    && request.resource.data.title.size() > 0
+                    && request.resource.data.author is string
+                    && request.resource.data.author.size() > 0;
+      
+      // NOTE: For proper security, use Firebase Auth + custom claims or Cloud Functions
+      // Deletion allowed for admin functionality (relies on client-side app logic for now)
+      allow update: if false;
+      allow delete: if true;
+    }
+    
+    // Statistics collection (optional, for tracking downloads/likes)
+    match /stats/{statId} {
+      allow read: if true;
+      allow write: if false; // Only updated via Cloud Functions
+    }
+  }
+}
